@@ -3,13 +3,13 @@
   Clone Project
 ``
 ```
-    git clone <đường link github>
+  git clone <đường link github>
 ```
 ``
   Pull code, file mới cập nhật về
 ``
 ```
-    git pull github main
+  git pull github main
 ```
 ``
   Các bước push code lên
