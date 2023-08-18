@@ -10,7 +10,7 @@
 ``
 ```diff
 # git pull github main
-{\color{red}Big}}
+<span style="color:orange;">Word up</span>
 ```
 ``
   Các bước push code lên
