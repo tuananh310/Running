@@ -10,10 +10,11 @@
 ``
 ```diff
 # git pull github main
-<span style="color:orange;">Word up</span>
+
 ```
 ``
   Các bước push code lên
+  <span style="color:orange;">Word up</span>
 ``
 ```
   1. Kiểm tra các file mới cập nhật (có thể bỏ qua): <p style="color:green;">git status</p>
