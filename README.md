@@ -8,7 +8,7 @@
 ``
   Pull code, file mới cập nhật về
 ``
-```
+```diff
   + git pull github main +
 ```
 ``
