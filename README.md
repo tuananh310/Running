@@ -11,6 +11,9 @@
 ```diff
 + git pull github main
 ```
+```diff
++ text in green
+```
 ``
   Các bước push code lên
 ``
@@ -19,7 +22,4 @@
   2. Thêm các file đã cập nhật vào commit: + git add .
   3. Commit các file đã cập nhật: + git commit -m '<nội dung tự nhập>'
   4. Push code: + git pull github main
-```
-```diff
-+ text in green
 ```
