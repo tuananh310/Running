@@ -11,9 +11,6 @@
 ```diff
 + git pull github main
 ```
-```diff
-+ text in green
-```
 ``
   Các bước push code lên
 ``
