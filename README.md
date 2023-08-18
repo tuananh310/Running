@@ -15,7 +15,7 @@
 ``
   Các bước push code lên
 ``
-```
+```style
 <span style="color:orange;">Word up</span>
   1. Kiểm tra các file mới cập nhật (có thể bỏ qua): <p style="color:green;">git status</p>
   2. Thêm các file đã cập nhật vào commit: + git add .
