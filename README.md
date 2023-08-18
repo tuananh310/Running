@@ -10,6 +10,7 @@
 ``
 ```diff
 + git pull github main
+$${\color{green}Green}$$
 ```
 ``
   Các bước push code lên
