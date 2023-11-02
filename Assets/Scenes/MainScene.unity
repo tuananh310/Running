@@ -558,8 +558,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 352375610}
+  rb: {fileID: 0}
   cam: {fileID: 963194228}
   speed: 16
+  gravity: -20
+  rotationSpeed: 16
+  jumpSpeed: 15
   turnSmoothTime: 0.1
 --- !u!143 &352375610
 CharacterController:
@@ -647,6 +651,13 @@ MonoBehaviour:
     GateFit: 2
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1138,6 +1149,13 @@ MonoBehaviour:
     GateFit: 2
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1314,6 +1332,13 @@ MonoBehaviour:
     GateFit: 2
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1676,8 +1701,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 1374592363}
+  rb: {fileID: 0}
   cam: {fileID: 963194228}
   speed: 16
+  gravity: -20
+  rotationSpeed: 16
+  jumpSpeed: 15
   turnSmoothTime: 0.1
 --- !u!1 &1466652607
 GameObject:
@@ -1734,6 +1763,13 @@ MonoBehaviour:
     GateFit: 2
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1750,7 +1786,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466652607}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18743934, y: -0.0000000084507095, z: 0.0000000016125762, w: 0.9822762}
+  m_LocalRotation: {x: 0.18743934, y: 0.00000000845071, z: -0.0000000016125764, w: 0.9822762}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1892,8 +1928,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 2071483613}
+  rb: {fileID: 0}
   cam: {fileID: 963194228}
   speed: 16
+  gravity: -20
+  rotationSpeed: 16
+  jumpSpeed: 15
   turnSmoothTime: 0.1
 --- !u!143 &2071483613
 CharacterController:
