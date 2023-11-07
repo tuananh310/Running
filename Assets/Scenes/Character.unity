@@ -297,9 +297,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1448682793}
-  smoothTime: 0.05
   speed: 20
-  gravityMultiplier: 3
+  movement:
+    speed: 16
+    multiplier: 2
+    acceleration: 25
+    isSprinting: 0
+    currentSpeed: 16
+  smoothTime: 0.05
+  gravityMultiplier: 1
+  jumpPower: 2.5
+  maxNumberOfJumps: 2
 --- !u!1 &1448682790
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,8 +319,8 @@ GameObject:
   - component: {fileID: 1448682793}
   - component: {fileID: 1448682792}
   - component: {fileID: 1448682791}
-  - component: {fileID: 1448682794}
   - component: {fileID: 1448682795}
+  - component: {fileID: 1448682796}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -387,14 +395,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1448682790}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21257184, y: -0.38650608, z: 0.09203327, w: 0.8927241}
-  m_LocalPosition: {x: 31.6, y: 25.2, z: -23.8}
+  m_LocalRotation: {x: 0.155232, y: -0.68985724, z: 0.16936962, w: 0.6865231}
+  m_LocalPosition: {x: 39, y: 19.6, z: -7.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 26.787, y: -46.821, z: 0}
---- !u!114 &1448682794
+  m_LocalEulerAnglesHint: {x: 26.54, y: -90, z: 1.177}
+--- !u!114 &1448682795
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -403,32 +411,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1448682790}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Script: {fileID: 11500000, guid: d9f6ffcfc5bc4c04a8fcf0bd2d7f1252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowDebugText: 0
-  m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
-  m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
-  m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
-  m_CameraCutEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1448682795
+  target: {fileID: 629477949}
+  smoothSpeed: 0.125
+  offset: {x: 26.1, y: 19.3, z: -0.57}
+--- !u!114 &1448682796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -437,12 +426,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1448682790}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9f6ffcfc5bc4c04a8fcf0bd2d7f1252, type: 3}
+  m_Script: {fileID: 11500000, guid: f4345cd1d6a342d41985fd9d5f27315d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 629477949}
-  smoothSpeed: 0.125
-  offset: {x: 26.1, y: 19.3, z: -0.57}
+  smoothTime: 0.15
 --- !u!1 &1555693860
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,6 +694,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c5a9e36c-7256-42bc-bc39-968e93d5b9fd
     m_ActionName: Gameplay/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 629477950}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d78b478e-cd40-4897-909a-17df2663025c
+    m_ActionName: Gameplay/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 629477950}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Sprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e7e8eac1-02bf-4716-b8be-3c3d45669464
+    m_ActionName: Gameplay/Print[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
