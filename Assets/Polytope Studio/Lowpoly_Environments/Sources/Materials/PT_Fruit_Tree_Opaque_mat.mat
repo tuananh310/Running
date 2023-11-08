@@ -81,14 +81,14 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Gradient: 1
-    - _GradientPower: 1
+    - _Gradient: 0
+    - _GradientPower: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SNOWONOFF: 0
-    - _Smoothness: 0.384
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SnowAmount: 1
     - _SnowCoverage: 0.45
