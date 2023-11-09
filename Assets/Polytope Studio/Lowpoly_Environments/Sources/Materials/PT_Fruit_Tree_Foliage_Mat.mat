@@ -82,9 +82,9 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Gradient: 0.59
+    - _Gradient: 0.458
     - _GradientPower: 0
-    - _LeavesThickness: 0.109
+    - _LeavesThickness: 0.329
     - _MaskClipValue: 0.5
     - _Metallic: 0
     - _Mode: 3
@@ -100,8 +100,8 @@ Material:
     - _SrcBlend: 1
     - _TRANSLUCENCYONOFF: 1
     - _TransAmbient: 1
-    - _TransDirect: 0.399
-    - _TransNormalDistortion: 0.59
+    - _TransDirect: 0.733
+    - _TransNormalDistortion: 0.639
     - _TransScattering: 8.1
     - _TransShadow: 1
     - _Translucency: 50
@@ -116,5 +116,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GroundColor: {r: 1, g: 0, b: 0, a: 1}
-    - _TopColor: {r: 0.009134057, g: 0.25415218, b: 0.027320892, a: 1}
+    - _TopColor: {r: 0.03958286, g: 0.19339624, b: 0.0045612315, a: 1}
   m_BuildTextureStacks: []

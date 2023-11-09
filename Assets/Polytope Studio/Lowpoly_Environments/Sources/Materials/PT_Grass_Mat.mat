@@ -16,6 +16,7 @@ Material:
   - _TRANSLUCENCYONOFF_ON
   m_InvalidKeywords:
   - _ALPHAPREMULTIPLY_ON
+  - _CUSTOMCOLORSTINTING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -73,7 +74,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
-    - _CUSTOMCOLORSTINTING: 0
+    - _CUSTOMCOLORSTINTING: 1
     - _CUSTOMWIND: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -81,9 +82,9 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Gradient: 1.4
-    - _GradientPower: 1
-    - _LeavesThickness: 0.5
+    - _Gradient: 1.58
+    - _GradientPower: 0.67
+    - _LeavesThickness: 0.542
     - _MaskClipValue: 0.5
     - _Metallic: 0
     - _Mode: 3
@@ -98,12 +99,12 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TRANSLUCENCYONOFF: 1
-    - _TransAmbient: 0.2
-    - _TransDirect: 1
-    - _TransNormalDistortion: 0.1
-    - _TransScattering: 2
+    - _TransAmbient: 0.137
+    - _TransDirect: 0.91
+    - _TransNormalDistortion: 0.093
+    - _TransScattering: 4
     - _TransShadow: 0.9
-    - _Translucency: 1
+    - _Translucency: 35.8
     - _UVSec: 0
     - _WindDensity: 1
     - _WindMovement: 1
@@ -113,6 +114,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 1, g: 0, b: 0, a: 1}
-    - _TopColor: {r: 0, g: 0.2178235, b: 1, a: 1}
+    - _GroundColor: {r: 0.017792149, g: 0.23584908, b: 0.0055624777, a: 1}
+    - _TopColor: {r: 0.13052502, g: 0.4056604, b: 0.066972226, a: 1}
   m_BuildTextureStacks: []
