@@ -38,6 +38,11 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Variables: Attack
+
+    [SerializeField] private float damage;
+
+    #endregion
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
@@ -48,6 +53,10 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
         ApplyMovement();
         ApplyGravity();
+    }
+
+    private void Attack(){
+
     }
 
     private void ApplyGravity()

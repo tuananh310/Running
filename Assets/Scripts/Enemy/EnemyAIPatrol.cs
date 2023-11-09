@@ -17,7 +17,7 @@ public class EnemyAIPatrol : MonoBehaviour
     // Thay đổi trạng thái
     [SerializeField] float sightRange, attackRange;
     bool playerInSight, playerInAttackRange;
-    [SerializeField] HealthBar healthBar;
+    [SerializeField] private HealthBar healthBar;
 
     #region Variables: Health
 
@@ -63,7 +63,7 @@ public class EnemyAIPatrol : MonoBehaviour
 
     void Attack()
     {
-
+        // Physics.OverlapBox
     }
 
     void Patrol() // Hàm đi tuần tra

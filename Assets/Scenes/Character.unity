@@ -249,7 +249,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   cam: {fileID: 1448682793}
   speed: 16
-  gravity: -20
+  gravity: -5
   rotationSpeed: 16
   jumpSpeed: 15
   turnSmoothTime: 0.1
@@ -498,15 +498,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5181703b44364cc469e393bacce36a63, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 57.1
+      value: 27.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5181703b44364cc469e393bacce36a63, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5181703b44364cc469e393bacce36a63, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.7
+      value: -29.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5181703b44364cc469e393bacce36a63, type: 3}
       propertyPath: m_LocalRotation.w
