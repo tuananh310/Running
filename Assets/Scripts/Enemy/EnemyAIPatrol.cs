@@ -6,9 +6,7 @@ using UnityEngine.AI;
 public class EnemyAIPatrol : MonoBehaviour
 {
     GameObject player;
-
     NavMeshAgent agent;
-
     [SerializeField] LayerMask groundLayer, PlayerLayer;
 
     // Tuần tra
@@ -16,22 +14,61 @@ public class EnemyAIPatrol : MonoBehaviour
     bool walkpointSet;
     [SerializeField] float range;
 
+    // Thay đổi trạng thái
+    [SerializeField] float sightRange, attackRange;
+    bool playerInSight, playerInAttackRange;
+    [SerializeField] HealthBar healthBar;
+
+    #region Variables: Health
+
+    [SerializeField] private float maxHealth, currentHealth;
+
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.Find("Player");
+        player = GameObject.FindWithTag("Player");
+
+        // Máu
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Patrol();
+        playerInSight = Physics.CheckSphere(transform.position, sightRange, PlayerLayer);
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerLayer);
+
+        if (!playerInSight && !playerInAttackRange)
+        {
+            Patrol();
+        }
+        if (playerInSight && !playerInAttackRange)
+        {
+            Chase();
+        }
+        if (playerInSight && playerInAttackRange)
+        {
+            Attack();
+        }
     }
 
-    void Patrol()
+    void Chase() // Hàm truy đuổi người chơi
     {
-        if (!walkpointSet) SearchForDestination();
+        agent.SetDestination(player.transform.position);
+    }
+
+    void Attack()
+    {
+
+    }
+
+    void Patrol() // Hàm đi tuần tra
+    {
+        if (!walkpointSet) SearchForDestination(); // Tìm kiếm điểm đến mới nếu điểm = false
         if (walkpointSet)
         {
             agent.SetDestination(destinationPoint);
@@ -42,7 +79,7 @@ public class EnemyAIPatrol : MonoBehaviour
         }
     }
 
-    void SearchForDestination()
+    void SearchForDestination() // Tìm kiếm ngẫu nhiên vị trí đi tuần
     {
         float z = Random.Range(-range, range);
         float x = Random.Range(-range, range);

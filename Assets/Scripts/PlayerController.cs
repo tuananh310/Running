@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
 {
     #region Variables: Movement
     private Vector2 _input;
-    [SerializeField] private Transform cam; // main camera
     private CharacterController _characterController;
     private Vector3 _direction;
     [SerializeField] private float speed;
