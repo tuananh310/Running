@@ -21,7 +21,7 @@ public class EnemyAIPatrol : MonoBehaviour
 
     #region Variables: Health
 
-    [SerializeField] private float maxHealth, currentHealth;
+    public float maxHealth, currentHealth;
 
     #endregion
 
@@ -58,6 +58,8 @@ public class EnemyAIPatrol : MonoBehaviour
 
     void Chase() // Hàm truy đuổi người chơi
     {
+        // agent.destination = player.transform.position;
+        // Vector3 playerdes = new Vector3(player.transform.position.x -5, player.transform.position.y, player.transform.position.z);
         agent.SetDestination(player.transform.position);
     }
 

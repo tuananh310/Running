@@ -39,8 +39,10 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Variables: Attack
-
-    [SerializeField] private float damage;
+    public Vector3 collision = Vector3.zero;
+    public GameObject lastHit;
+    public LayerMask layer;
+    [SerializeField] private float damage, attackRange;
 
     #endregion
     private void Awake()
@@ -55,8 +57,25 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
     }
 
-    private void Attack(){
+    public void Attack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            FindEnemy();
+        }
+    }
 
+    private void FindEnemy()
+    {
+        var ray = new Ray(this.transform.position, this.transform.forward);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, attackRange, layer))
+        {
+            Debug.Log(hit.point);
+            // Debug.Log(hit.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth);
+            lastHit = hit.transform.gameObject;
+            collision = hit.point;
+        }
     }
 
     private void ApplyGravity()
