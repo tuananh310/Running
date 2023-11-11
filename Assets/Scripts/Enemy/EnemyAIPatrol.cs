@@ -17,7 +17,7 @@ public class EnemyAIPatrol : MonoBehaviour
     // Thay đổi trạng thái
     [SerializeField] float sightRange, attackRange;
     bool playerInSight, playerInAttackRange;
-    [SerializeField] private HealthBar healthBar;
+    public HealthBar healthBar;
 
     #region Variables: Health
 

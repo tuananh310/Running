@@ -65,17 +65,43 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(this.transform.position + this.transform.forward * attackRange, 5);
+    }
+
     private void FindEnemy()
     {
-        var ray = new Ray(this.transform.position, this.transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, attackRange, layer))
+        // RaycastHit hit;
+        var listOfObjects = Physics.SphereCastAll(this.transform.position, 5, this.transform.forward, attackRange, layer);
+        // var listOfObjects = Physics.OverlapSphere(this.transform.position, 50);
+
+        foreach (var item in listOfObjects)
         {
-            Debug.Log(hit.point);
-            // Debug.Log(hit.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth);
-            lastHit = hit.transform.gameObject;
-            collision = hit.point;
+            float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
+            if (angle < 45)
+            {
+                var enemyCurrentHealth = item.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth -= 15;
+                item.transform.gameObject.GetComponent<EnemyAIPatrol>().healthBar.SetHealth(enemyCurrentHealth);
+                // Debug.Log(item.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth);
+            }
         }
+
+        // Vector3 noAngle = this.transform.forward;
+        // Quaternion spreadAngle = Quaternion.AngleAxis(360, new Vector3(0, 1, 0));
+        // Vector3 newVector = spreadAngle * noAngle;
+
+        // var ray = new Ray(this.transform.position, newVector);
+        // // var ray = new Ray(this.transform.position, this.transform.forward);
+
+        // if (Physics.Raycast(ray, out hit, attackRange, layer))
+        // {
+        //     Debug.Log(hit.point);
+        //     // Debug.Log(hit.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth);
+        //     lastHit = hit.transform.gameObject;
+        //     collision = hit.point;
+        // }
     }
 
     private void ApplyGravity()
