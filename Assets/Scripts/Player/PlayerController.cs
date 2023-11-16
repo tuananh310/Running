@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering.LookDev;
+// using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -65,11 +65,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(this.transform.position + this.transform.forward * attackRange, 5);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawSphere(this.transform.position + this.transform.forward * attackRange, 5);
+    // }
 
     private void FindEnemy()
     {
@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
-        _direction = new Vector3(_input.x, 0f, _input.y);
+        _direction = new Vector3(-_input.y, 0f, _input.x);
     }
 
     public void Jump(InputAction.CallbackContext context)
