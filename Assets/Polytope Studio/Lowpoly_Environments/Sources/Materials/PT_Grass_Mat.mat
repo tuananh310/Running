@@ -99,16 +99,16 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TRANSLUCENCYONOFF: 1
-    - _TransAmbient: 0.137
+    - _TransAmbient: 0.357
     - _TransDirect: 0.91
     - _TransNormalDistortion: 0.093
     - _TransScattering: 4
-    - _TransShadow: 0.9
-    - _Translucency: 35.8
+    - _TransShadow: 0
+    - _Translucency: 39.6
     - _UVSec: 0
-    - _WindDensity: 1
-    - _WindMovement: 1
-    - _WindStrength: 0.5
+    - _WindDensity: 0
+    - _WindMovement: 0
+    - _WindStrength: 0
     - _ZWrite: 0
     - __dirty: 0
     m_Colors:
