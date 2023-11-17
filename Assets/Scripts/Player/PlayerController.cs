@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
-    [SerializeField] private float speed;
-
     [SerializeField] private Movement movement;
 
     #endregion
@@ -39,10 +37,9 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Variables: Attack
-    public Vector3 collision = Vector3.zero;
-    public GameObject lastHit;
-    public LayerMask layer;
-    [SerializeField] private float damage, attackRange;
+    
+    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private float damage, attackRange, shootingRange;
 
     #endregion
     private void Awake()
@@ -57,51 +54,51 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
     }
 
-    public void Attack(InputAction.CallbackContext context)
+    public void MeleeAttack(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            FindEnemy();
+            RaycastHit[] enemies = EnemyInRange();
+            foreach (var item in enemies)
+            {
+                float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
+                if (angle < 45)
+                {
+                    var enemy = item.transform.gameObject.GetComponent<EnemyAIPatrol>();
+                    enemy.currentHealth -= damage;
+                    enemy.healthBar.SetHealth(enemy.currentHealth);
+                }
+            }
         }
     }
 
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawSphere(this.transform.position + this.transform.forward * attackRange, 5);
-    // }
-
-    private void FindEnemy()
+    private RaycastHit[] EnemyInRange()
     {
-        // RaycastHit hit;
-        var listOfObjects = Physics.SphereCastAll(this.transform.position, 5, this.transform.forward, attackRange, layer);
-        // var listOfObjects = Physics.OverlapSphere(this.transform.position, 50);
+        var listOfObjects = Physics.SphereCastAll(this.transform.position, 5, this.transform.forward, attackRange, enemyLayer);
+        return listOfObjects;
+    }
 
-        foreach (var item in listOfObjects)
+    public void Shooting(InputAction.CallbackContext context)
+    {
+        if (context.started)
         {
-            float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
-            if (angle < 45)
-            {
-                var enemyCurrentHealth = item.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth -= 15;
-                item.transform.gameObject.GetComponent<EnemyAIPatrol>().healthBar.SetHealth(enemyCurrentHealth);
-                // Debug.Log(item.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth);
-            }
+            // Debug.Log("hihihi");
+            Vector3 currentPos = this.transform.position;
+            currentPos.y += 2;
+            BulletManager.instance.Shooting(currentPos);
+            // RaycastHit hit;
+            // if (Physics.Raycast(currentPos, transform.TransformDirection(Vector3.forward), out hit, shootingRange, enemyLayer))
+            // {
+            //     Debug.DrawRay(currentPos, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //     Debug.Log(hit.transform.name);
+            // }
         }
+    }
 
-        // Vector3 noAngle = this.transform.forward;
-        // Quaternion spreadAngle = Quaternion.AngleAxis(360, new Vector3(0, 1, 0));
-        // Vector3 newVector = spreadAngle * noAngle;
-
-        // var ray = new Ray(this.transform.position, newVector);
-        // // var ray = new Ray(this.transform.position, this.transform.forward);
-
-        // if (Physics.Raycast(ray, out hit, attackRange, layer))
-        // {
-        //     Debug.Log(hit.point);
-        //     // Debug.Log(hit.transform.gameObject.GetComponent<EnemyAIPatrol>().currentHealth);
-        //     lastHit = hit.transform.gameObject;
-        //     collision = hit.point;
-        // }
+    private void OnDrawGizmos()
+    {
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawRay(this.transform.position, transform.TransformDirection(Vector3.forward) * 100);
     }
 
     private void ApplyGravity()

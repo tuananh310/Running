@@ -17,7 +17,7 @@ public class HealthItem : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log(other);
+        // Debug.Log(other);
     }
 
 }
