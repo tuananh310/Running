@@ -10,8 +10,8 @@ public class ThirdPersonMovement : MonoBehaviour
     public Rigidbody rb;
     public Transform cam; // main camera
     public float speed = 16f; // tốc độ di chuyển
-    [SerializeField] private float gravity = -20f;
-    [SerializeField] private float rotationSpeed = 16f;
+    // [SerializeField] private float gravity = -20f;
+    // [SerializeField] private float rotationSpeed = 16f;
     [SerializeField] private float jumpSpeed = 15f;
     Vector3 moveVelocity;
     Vector3 turnVelocity;
