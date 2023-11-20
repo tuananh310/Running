@@ -7,6 +7,7 @@ public class SimpleBullet : MonoBehaviour
     #region Singleton
 
     public static SimpleBullet instance;
+    [SerializeField] private float damage = 20f;
 
     private void Awake()
     {
@@ -31,7 +32,12 @@ public class SimpleBullet : MonoBehaviour
         if (other.tag != "Player")
         {
             Destroy(transform.gameObject);
+            var enemy = other.transform.gameObject.GetComponent<EnemyAIPatrol>();
+            enemy.currentHealth -= damage;
+            enemy.healthBar.SetHealth(enemy.currentHealth);
+            if(enemy.currentHealth <= 0){
+                Destroy(other.transform.gameObject);
+            }
         }
-        // Debug.Log(other.transform.gameObject);
     }
 }
