@@ -4,6 +4,7 @@ using System.Collections.Generic;
 // using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -37,9 +38,13 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Variables: Attack
-    
+
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private float damage, attackRange, shootingRange;
+    [SerializeField] private float damage, attackRange, attackRadius, shootingRange, fireRate;
+    float nextFire = 0.5f;
+    bool isShooting = false;
+    // bool isFacingEnemy = 
+    Collider enemyToShot;
 
     #endregion
     private void Awake()
@@ -52,13 +57,37 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
         ApplyMovement();
         ApplyGravity();
+        FindEnemyInShootingRange(shootingRange);
+        if (isShooting && enemyToShot != null)
+        {
+            // Determine which direction to rotate towards
+            Vector3 targetDirection = enemyToShot.transform.position - transform.position;
+            // The step size is equal to speed times frame time.
+            float singleStep = 20 * Time.deltaTime;
+            // Rotate the forward vector towards the target direction by one step
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+            // Calculate a rotation a step closer to the target and applies rotation to this object
+            transform.rotation = Quaternion.LookRotation(newDirection);
+
+            StartCoroutine("WaitForStopFaceToEnemy");
+        }
+        else
+        {
+            StartCoroutine("WaitForStopFaceToEnemy");
+        }
+    }
+
+    private RaycastHit[] EnemyInAttackRange(float radius)
+    {
+        var listOfObjects = Physics.SphereCastAll(this.transform.position, radius, this.transform.forward, attackRange, enemyLayer);
+        return listOfObjects;
     }
 
     public void MeleeAttack(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            RaycastHit[] enemies = EnemyInRange();
+            RaycastHit[] enemies = EnemyInAttackRange(attackRadius);
             foreach (var item in enemies)
             {
                 float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
@@ -72,27 +101,55 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private RaycastHit[] EnemyInRange()
+    private void FindEnemyInShootingRange(float radius)
     {
-        var listOfObjects = Physics.SphereCastAll(this.transform.position, 5, this.transform.forward, attackRange, enemyLayer);
-        return listOfObjects;
+        var enemiesInShootingRange = Physics.OverlapSphere(transform.position, radius, enemyLayer);
+        Collider closestEnemy = new Collider();
+        float lowestDist = Mathf.Infinity;
+
+        foreach (var enemy in enemiesInShootingRange)
+        {
+            float dist = Vector3.Distance(enemy.transform.position, transform.position);
+
+            if (dist < lowestDist)
+            {
+                lowestDist = dist;
+                closestEnemy = enemy;
+            }
+        }
+        enemyToShot = closestEnemy;
     }
 
     public void Shooting(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && Time.time >= nextFire)
         {
-            // Debug.Log("hihihi");
-            Vector3 currentPos = this.transform.position;
-            currentPos.y += 2;
-            BulletManager.instance.Shooting(currentPos);
-            // RaycastHit hit;
-            // if (Physics.Raycast(currentPos, transform.TransformDirection(Vector3.forward), out hit, shootingRange, enemyLayer))
-            // {
-            //     Debug.DrawRay(currentPos, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            //     Debug.Log(hit.transform.name);
-            // }
+            nextFire = Time.time + fireRate;
+            if (enemyToShot != null)
+            {
+
+
+                isShooting = true;
+                StartCoroutine("WaitForShooting");
+                StopCoroutine("WaitForStopFaceToEnemy");
+
+            }
         }
+    }
+
+    IEnumerator WaitForShooting()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        Vector3 currentPos = transform.position;
+        currentPos.y += 2;
+        BulletManager.instance.Shooting(currentPos);
+    }
+
+    IEnumerator WaitForStopFaceToEnemy()
+    {
+        yield return new WaitForSeconds(1f);
+        isShooting = false;
     }
 
     private void OnDrawGizmos()
@@ -117,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyRotation()
     {
-        if (_input.sqrMagnitude == 0) return;
+        if (_input.sqrMagnitude == 0 || isShooting) return;
 
         var targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg; // Lấy góc muốn xoay
         var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime); // Làm mượt khi xoay
