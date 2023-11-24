@@ -387,7 +387,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727461d5608d8424da7d839926d18149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 30561128}
 --- !u!114 &67365019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a0e58b27a8f62469ecaacacbede9ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 20
   destroyTime: 5
 --- !u!4 &224308505
 Transform:
@@ -2119,16 +2119,16 @@ MonoBehaviour:
     isSprinting: 0
     currentSpeed: 16
   smoothTime: 0.05
-  gravityMultiplier: 1
-  jumpPower: 2.5
+  gravityMultiplier: 1.25
+  jumpPower: 2.15
   maxNumberOfJumps: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
   damage: 15
-  attackRange: 5.96
+  attackRange: 6
   attackRadius: 5
-  shootingRange: 30
+  shootingRange: 20
   fireRate: 0.5
 --- !u!143 &1181101365
 CharacterController:
@@ -2149,13 +2149,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 5
-  m_Radius: 0.94
+  m_Height: 5.09
+  m_Radius: 1.39
   m_SlopeLimit: 45
-  m_StepOffset: 1
+  m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 2.55, z: 0}
+  m_Center: {x: 0, y: 2.65, z: 0}
 --- !u!4 &1181101366 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5181703b44364cc469e393bacce36a63, type: 3}
@@ -2213,7 +2213,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727461d5608d8424da7d839926d18149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 30561128}
 --- !u!114 &1198767755
 MonoBehaviour:
   m_ObjectHideFlags: 0
