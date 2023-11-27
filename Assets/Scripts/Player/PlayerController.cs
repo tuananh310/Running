@@ -3,17 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 // using UnityEditor.Rendering.LookDev;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    #region Singleton
+    public static PlayerController instance;
+
+    #endregion
+
     #region Variables: Movement
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
     [SerializeField] private Movement movement;
+    NavMeshAgent _navMeshPlayer;
 
     #endregion
 
@@ -43,37 +50,65 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float damage, attackRange, attackRadius, shootingRange, fireRate;
     float nextFire = 0.5f;
     bool isShooting = false;
-    // bool isFacingEnemy = 
+    float typeAttack = 0;
     Collider enemyToShot;
+    [HideInInspector] public Transform targetEnemy;
 
     #endregion
+
+
     private void Awake()
     {
+        instance = this;
+    }
+
+    private void Start()
+    {
         _characterController = GetComponent<CharacterController>();
+        _navMeshPlayer = GetComponent<NavMeshAgent>();
+        // _navMeshPlayer.speed = movement.speed;
+        // _navMeshPlayer.acceleration = movement.acceleration;
     }
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            MoveToClickPosition();
+        }
         ApplyRotation();
         ApplyMovement();
         ApplyGravity();
-        FindEnemyInShootingRange(shootingRange);
-        if (isShooting && enemyToShot != null)
-        {
-            // Determine which direction to rotate towards
-            Vector3 targetDirection = enemyToShot.transform.position - transform.position;
-            // The step size is equal to speed times frame time.
-            float singleStep = 20 * Time.deltaTime;
-            // Rotate the forward vector towards the target direction by one step
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-            // Calculate a rotation a step closer to the target and applies rotation to this object
-            transform.rotation = Quaternion.LookRotation(newDirection);
+        ChasingTarget();
+        // FindEnemyInShootingRange(shootingRange);
+        // if (isShooting && enemyToShot != null)
+        // {
+        //     // Determine which direction to rotate towards
+        //     Vector3 targetDirection = enemyToShot.transform.position - transform.position;
+        //     // The step size is equal to speed times frame time.
+        //     float singleStep = 20 * Time.deltaTime;
+        //     // Rotate the forward vector towards the target direction by one step
+        //     Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+        //     // Calculate a rotation a step closer to the target and applies rotation to this object
+        //     transform.rotation = Quaternion.LookRotation(newDirection);
 
-            StartCoroutine("WaitForStopFaceToEnemy");
-        }
-        else
+        //     StartCoroutine("WaitForStopFaceToEnemy");
+        // }
+        // else
+        // {
+        //     StartCoroutine("WaitForStopFaceToEnemy");
+        // }
+    }
+
+    public void Attack(Transform target)
+    {
+        if (typeAttack == 0)
         {
-            StartCoroutine("WaitForStopFaceToEnemy");
+            MeleeAttack();
+        }
+        else if (typeAttack == 1)
+        {
+
         }
     }
 
@@ -83,23 +118,61 @@ public class PlayerController : MonoBehaviour
         return listOfObjects;
     }
 
-    public void MeleeAttack(InputAction.CallbackContext context)
+    private void ChasingTarget()
     {
-        if (context.started)
+        if (targetEnemy != null)
         {
-            RaycastHit[] enemies = EnemyInAttackRange(attackRadius);
-            foreach (var item in enemies)
+            // _navMeshPlayer.SetDestination(targetEnemy.position);
+            NavMeshPath path = new NavMeshPath();
+            if (NavMesh.CalculatePath(transform.position, targetEnemy.position, NavMesh.AllAreas, path))
             {
-                float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
-                if (angle < 45)
+                bool isvalid = true;
+                if (path.status != NavMeshPathStatus.PathComplete) isvalid = false;
+                if (isvalid)
                 {
-                    var enemy = item.transform.gameObject.GetComponent<EnemyAIPatrol>();
-                    enemy.currentHealth -= damage;
-                    enemy.healthBar.SetHealth(enemy.currentHealth);
+                    _navMeshPlayer.SetDestination(targetEnemy.position);
+                    _navMeshPlayer.isStopped = false;
+                }
+                else
+                {
+                    _navMeshPlayer.isStopped = true;
                 }
             }
         }
     }
+
+    private void MeleeAttack()
+    {
+        RaycastHit[] enemies = EnemyInAttackRange(attackRadius);
+        foreach (var item in enemies)
+        {
+            float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
+            if (angle < 45)
+            {
+                var enemy = item.transform.gameObject.GetComponent<EnemyAIPatrol>();
+                enemy.currentHealth -= damage;
+                enemy.healthBar.SetHealth(enemy.currentHealth);
+            }
+        }
+    }
+
+    // public void MeleeAttack(InputAction.CallbackContext context)
+    // {
+    //     if (context.started)
+    //     {
+    //         RaycastHit[] enemies = EnemyInAttackRange(attackRadius);
+    //         foreach (var item in enemies)
+    //         {
+    //             float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
+    //             if (angle < 45)
+    //             {
+    //                 var enemy = item.transform.gameObject.GetComponent<EnemyAIPatrol>();
+    //                 enemy.currentHealth -= damage;
+    //                 enemy.healthBar.SetHealth(enemy.currentHealth);
+    //             }
+    //         }
+    //     }
+    // }
 
     private void FindEnemyInShootingRange(float radius)
     {
@@ -120,22 +193,19 @@ public class PlayerController : MonoBehaviour
         enemyToShot = closestEnemy;
     }
 
-    public void Shooting(InputAction.CallbackContext context)
-    {
-        if (context.started && Time.time >= nextFire)
-        {
-            nextFire = Time.time + fireRate;
-            if (enemyToShot != null)
-            {
-
-
-                isShooting = true;
-                StartCoroutine("WaitForShooting");
-                StopCoroutine("WaitForStopFaceToEnemy");
-
-            }
-        }
-    }
+    // public void Shooting(InputAction.CallbackContext context)
+    // {
+    //     if (context.started && Time.time >= nextFire)
+    //     {
+    //         nextFire = Time.time + fireRate;
+    //         if (enemyToShot != null)
+    //         {
+    //             isShooting = true;
+    //             StartCoroutine("WaitForShooting");
+    //             StopCoroutine("WaitForStopFaceToEnemy");
+    //         }
+    //     }
+    // }
 
     IEnumerator WaitForShooting()
     {
@@ -186,13 +256,26 @@ public class PlayerController : MonoBehaviour
         var targetSpeed = movement.isSprinting ? movement.speed * movement.multiplier : movement.speed;
         movement.currentSpeed = Mathf.MoveTowards(movement.currentSpeed, targetSpeed, movement.acceleration * Time.deltaTime);
 
-        _characterController.Move(_direction * movement.currentSpeed * Time.deltaTime); // Di chuyển nhân vật
+        _navMeshPlayer.Move(_direction * movement.currentSpeed * Time.deltaTime);
+    }
+
+    private void MoveToClickPosition()
+    {
+        targetEnemy = null;
+        Vector3 mousePosition = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            _navMeshPlayer.SetDestination(hit.point);
+        }
     }
 
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
         _direction = new Vector3(-_input.y, 0f, _input.x);
+        _navMeshPlayer.ResetPath();
     }
 
     public void Jump(InputAction.CallbackContext context)

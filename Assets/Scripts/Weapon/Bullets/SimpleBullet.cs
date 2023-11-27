@@ -32,11 +32,15 @@ public class SimpleBullet : MonoBehaviour
         if (other.tag != "Player")
         {
             Destroy(transform.gameObject);
-            var enemy = other.transform.gameObject.GetComponent<EnemyAIPatrol>();
-            enemy.currentHealth -= damage;
-            enemy.healthBar.SetHealth(enemy.currentHealth);
-            if(enemy.currentHealth <= 0){
-                Destroy(other.transform.gameObject);
+            if (other.tag == "Enemy")
+            {
+                var enemy = other.transform.gameObject.GetComponent<EnemyAIPatrol>();
+                enemy.currentHealth -= damage;
+                enemy.healthBar.SetHealth(enemy.currentHealth);
+                if (enemy.currentHealth <= 0)
+                {
+                    Destroy(other.transform.gameObject);
+                }
             }
         }
     }

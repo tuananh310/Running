@@ -8,6 +8,7 @@ public class EnemyAIPatrol : MonoBehaviour
     GameObject player;
     NavMeshAgent agent;
     [SerializeField] LayerMask groundLayer, PlayerLayer;
+    CursorManager cursorManager;
 
     // Tuần tra
     Vector3 destinationPoint;
@@ -55,6 +56,17 @@ public class EnemyAIPatrol : MonoBehaviour
             Attack();
         }
     }
+
+    // private void OnMouseOver() {
+    //     CursorManager.instance.OnAttackCursorEnter();
+    // }
+    // private void OnMouseExit() {
+    //     CursorManager.instance.OnCursorExit();
+    // }
+
+    // private void OnMouseEnter() {
+    //     CursorManager.instance.OnAttackCursorEnter();
+    // }
 
     void Chase() // Hàm truy đuổi người chơi
     {
