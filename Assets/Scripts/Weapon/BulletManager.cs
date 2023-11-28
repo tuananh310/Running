@@ -20,20 +20,16 @@ public class BulletManager : MonoBehaviour
         instance = this;
     }
 
-    public void Shooting(Vector3 initPosition)
+    public void Shooting()
     {
         Vector3 mousePosition = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            var bullet = Instantiate(simpleBullet, initPosition, Quaternion.identity);
-            gun.transform.LookAt(hit.point);
-            // bullet.transform.rotation = Quaternion.LookRotation(hit.point);
-            // bullet.transform.LookAt(hit.point);
-            // var bullet = Instantiate(simpleBullet, initPosition, gun.transform.rotation);
+            PlayerController.instance.transform.LookAt(hit.point);
+            var bullet = Instantiate(simpleBullet, gun.transform.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody>().velocity = gun.transform.forward * bulletSpeed;
-            // bullet.GetComponent<NavMeshAgent>().SetDestination(target.position);
         }
 
     }

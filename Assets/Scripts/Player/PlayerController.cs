@@ -74,23 +74,6 @@ public class PlayerController : MonoBehaviour
         ApplyMovement();
         ApplyGravity();
         // FindEnemyInShootingRange(shootingRange);
-        // if (isShooting && enemyToShot != null)
-        // {
-        //     // Determine which direction to rotate towards
-        //     Vector3 targetDirection = enemyToShot.transform.position - transform.position;
-        //     // The step size is equal to speed times frame time.
-        //     float singleStep = 20 * Time.deltaTime;
-        //     // Rotate the forward vector towards the target direction by one step
-        //     Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-        //     // Calculate a rotation a step closer to the target and applies rotation to this object
-        //     transform.rotation = Quaternion.LookRotation(newDirection);
-
-        //     StartCoroutine("WaitForStopFaceToEnemy");
-        // }
-        // else
-        // {
-        //     StartCoroutine("WaitForStopFaceToEnemy");
-        // }
     }
 
     private void FindEnemyInShootingRange(float radius)
@@ -114,34 +97,19 @@ public class PlayerController : MonoBehaviour
 
     public void Shooting(InputAction.CallbackContext context)
     {
-        if (context.started && Time.time - lastShooting >= cooldownShooting)
+        if ((context.started || context.performed) && Time.time - lastShooting >= cooldownShooting)
         {
             lastShooting = Time.time;
-            Vector3 currentPos = transform.position;
-            currentPos.y += 2;
-            BulletManager.instance.Shooting(currentPos);
-            // if (enemyToShot != null)
-            // {
-            //     isShooting = true;
-            //     StartCoroutine("WaitForShooting");
-            //     StopCoroutine("WaitForStopFaceToEnemy");
-            // }
+            _animator.SetBool("isShooting", true);
+            BulletManager.instance.Shooting();
+        }
+        if(context.canceled){
+            _animator.SetBool("isShooting", false);
         }
     }
 
-    IEnumerator WaitForShooting()
-    {
-        yield return new WaitForSeconds(0.2f);
-
-        Vector3 currentPos = transform.position;
-        currentPos.y += 2;
-        // BulletManager.instance.Shooting(currentPos);
-    }
-
-    IEnumerator WaitForStopFaceToEnemy()
-    {
-        yield return new WaitForSeconds(1f);
-        isShooting = false;
+    private void GenerateBullet(){
+        BulletManager.instance.Shooting();
     }
 
     private void OnDrawGizmos()
@@ -189,7 +157,6 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("isWalking", true);
         }
         if(context.canceled){
-            Debug.Log("hihihi");
             _animator.SetBool("isWalking", false);
         }
         _input = context.ReadValue<Vector2>();
