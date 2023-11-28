@@ -15,12 +15,13 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    Animator _animator;
+
     #region Variables: Movement
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
     [SerializeField] private Movement movement;
-    NavMeshAgent _navMeshPlayer;
 
     #endregion
 
@@ -45,17 +46,16 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Variables: Attack
-
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private float damage, attackRange, attackRadius, shootingRange, fireRate;
-    float nextFire = 0.5f;
+    [SerializeField] private float damage;
+    [SerializeField] private float shootingRange, fireRate, cooldownShooting;
+    float lastShooting;
     bool isShooting = false;
-    float typeAttack = 0;
+    float typeAttack = 1;
     Collider enemyToShot;
     [HideInInspector] public Transform targetEnemy;
 
     #endregion
-
 
     private void Awake()
     {
@@ -65,21 +65,14 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        _navMeshPlayer = GetComponent<NavMeshAgent>();
-        // _navMeshPlayer.speed = movement.speed;
-        // _navMeshPlayer.acceleration = movement.acceleration;
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            MoveToClickPosition();
-        }
         ApplyRotation();
         ApplyMovement();
         ApplyGravity();
-        ChasingTarget();
         // FindEnemyInShootingRange(shootingRange);
         // if (isShooting && enemyToShot != null)
         // {
@@ -100,80 +93,6 @@ public class PlayerController : MonoBehaviour
         // }
     }
 
-    public void Attack(Transform target)
-    {
-        if (typeAttack == 0)
-        {
-            MeleeAttack();
-        }
-        else if (typeAttack == 1)
-        {
-
-        }
-    }
-
-    private RaycastHit[] EnemyInAttackRange(float radius)
-    {
-        var listOfObjects = Physics.SphereCastAll(this.transform.position, radius, this.transform.forward, attackRange, enemyLayer);
-        return listOfObjects;
-    }
-
-    private void ChasingTarget()
-    {
-        if (targetEnemy != null)
-        {
-            // _navMeshPlayer.SetDestination(targetEnemy.position);
-            NavMeshPath path = new NavMeshPath();
-            if (NavMesh.CalculatePath(transform.position, targetEnemy.position, NavMesh.AllAreas, path))
-            {
-                bool isvalid = true;
-                if (path.status != NavMeshPathStatus.PathComplete) isvalid = false;
-                if (isvalid)
-                {
-                    _navMeshPlayer.SetDestination(targetEnemy.position);
-                    _navMeshPlayer.isStopped = false;
-                }
-                else
-                {
-                    _navMeshPlayer.isStopped = true;
-                }
-            }
-        }
-    }
-
-    private void MeleeAttack()
-    {
-        RaycastHit[] enemies = EnemyInAttackRange(attackRadius);
-        foreach (var item in enemies)
-        {
-            float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
-            if (angle < 45)
-            {
-                var enemy = item.transform.gameObject.GetComponent<EnemyAIPatrol>();
-                enemy.currentHealth -= damage;
-                enemy.healthBar.SetHealth(enemy.currentHealth);
-            }
-        }
-    }
-
-    // public void MeleeAttack(InputAction.CallbackContext context)
-    // {
-    //     if (context.started)
-    //     {
-    //         RaycastHit[] enemies = EnemyInAttackRange(attackRadius);
-    //         foreach (var item in enemies)
-    //         {
-    //             float angle = Vector3.Angle(item.transform.position - this.transform.position, this.transform.forward);
-    //             if (angle < 45)
-    //             {
-    //                 var enemy = item.transform.gameObject.GetComponent<EnemyAIPatrol>();
-    //                 enemy.currentHealth -= damage;
-    //                 enemy.healthBar.SetHealth(enemy.currentHealth);
-    //             }
-    //         }
-    //     }
-    // }
-
     private void FindEnemyInShootingRange(float radius)
     {
         var enemiesInShootingRange = Physics.OverlapSphere(transform.position, radius, enemyLayer);
@@ -193,19 +112,22 @@ public class PlayerController : MonoBehaviour
         enemyToShot = closestEnemy;
     }
 
-    // public void Shooting(InputAction.CallbackContext context)
-    // {
-    //     if (context.started && Time.time >= nextFire)
-    //     {
-    //         nextFire = Time.time + fireRate;
-    //         if (enemyToShot != null)
-    //         {
-    //             isShooting = true;
-    //             StartCoroutine("WaitForShooting");
-    //             StopCoroutine("WaitForStopFaceToEnemy");
-    //         }
-    //     }
-    // }
+    public void Shooting(InputAction.CallbackContext context)
+    {
+        if (context.started && Time.time - lastShooting >= cooldownShooting)
+        {
+            lastShooting = Time.time;
+            Vector3 currentPos = transform.position;
+            currentPos.y += 2;
+            BulletManager.instance.Shooting(currentPos);
+            // if (enemyToShot != null)
+            // {
+            //     isShooting = true;
+            //     StartCoroutine("WaitForShooting");
+            //     StopCoroutine("WaitForStopFaceToEnemy");
+            // }
+        }
+    }
 
     IEnumerator WaitForShooting()
     {
@@ -213,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 currentPos = transform.position;
         currentPos.y += 2;
-        BulletManager.instance.Shooting(currentPos);
+        // BulletManager.instance.Shooting(currentPos);
     }
 
     IEnumerator WaitForStopFaceToEnemy()
@@ -256,26 +178,23 @@ public class PlayerController : MonoBehaviour
         var targetSpeed = movement.isSprinting ? movement.speed * movement.multiplier : movement.speed;
         movement.currentSpeed = Mathf.MoveTowards(movement.currentSpeed, targetSpeed, movement.acceleration * Time.deltaTime);
 
-        _navMeshPlayer.Move(_direction * movement.currentSpeed * Time.deltaTime);
-    }
+        _characterController.Move(_direction * movement.currentSpeed * Time.deltaTime);
 
-    private void MoveToClickPosition()
-    {
-        targetEnemy = null;
-        Vector3 mousePosition = Input.mousePosition;
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
-            _navMeshPlayer.SetDestination(hit.point);
-        }
     }
 
     public void Move(InputAction.CallbackContext context)
     {
+        if (context.started || context.performed)
+        {
+            _animator.SetBool("isWalking", true);
+        }
+        if(context.canceled){
+            Debug.Log("hihihi");
+            _animator.SetBool("isWalking", false);
+        }
         _input = context.ReadValue<Vector2>();
         _direction = new Vector3(-_input.y, 0f, _input.x);
-        _navMeshPlayer.ResetPath();
+        // _navMeshPlayer.ResetPath();
     }
 
     public void Jump(InputAction.CallbackContext context)

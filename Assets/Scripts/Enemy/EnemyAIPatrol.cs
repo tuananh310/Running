@@ -40,6 +40,7 @@ public class EnemyAIPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Patrol();
         playerInSight = Physics.CheckSphere(transform.position, sightRange, PlayerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerLayer);
 
@@ -56,17 +57,6 @@ public class EnemyAIPatrol : MonoBehaviour
             Attack();
         }
     }
-
-    // private void OnMouseOver() {
-    //     CursorManager.instance.OnAttackCursorEnter();
-    // }
-    // private void OnMouseExit() {
-    //     CursorManager.instance.OnCursorExit();
-    // }
-
-    // private void OnMouseEnter() {
-    //     CursorManager.instance.OnAttackCursorEnter();
-    // }
 
     void Chase() // Hàm truy đuổi người chơi
     {
