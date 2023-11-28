@@ -34,7 +34,7 @@ public class SimpleBullet : MonoBehaviour
             _navMeshBullet.SetDestination(target.position);
         }
 
-        // Destroy(transform.gameObject, destroyTime);
+        Destroy(transform.gameObject, destroyTime);
     }
 
     private void OnTriggerEnter(Collider other)
