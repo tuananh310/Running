@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Melee Attack",
-                    "type": "Button",
-                    "id": "88c34a36-8eba-4572-9756-bd03bae2da64",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Shooting",
                     "type": "Button",
                     "id": "f04f36db-a871-4c33-bd9b-8ece87df4deb",
@@ -142,19 +133,8 @@
                 },
                 {
                     "name": "",
-                    "id": "ca87068b-7882-4b68-af99-d60071a2cf56",
-                    "path": "<Keyboard>/j",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Melee Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "eb96493a-20d3-4cde-bee8-a6c50514240c",
-                    "path": "<Keyboard>/k",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
