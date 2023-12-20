@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shootingRange, fireRate, cooldownShooting;
     float lastShooting;
     bool isShooting = false;
-    float typeAttack = 1;
     Collider enemyToShot;
     [HideInInspector] public Transform targetEnemy;
 
